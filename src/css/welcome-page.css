@@ -1,0 +1,107 @@
+*{
+  font-family: 'Poppins', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.welcome-page-container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.welcome-page {
+  height: 100%;
+  width: 100%;
+  /* border: 3px solid green; */
+}
+
+.wp-top {
+  height: 70%;
+  /* border: 2px solid blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wp-bottom {
+  height: 30%;
+  /* border: 2px solid blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wp-bottom .loader-div {
+  width: 70%;
+  height: 20px;
+  border: 2px solid rgb(69, 138, 119);
+  border-radius: 20px;
+}
+
+.loader {
+  height: 100%;
+  width: 30px;
+  background-color: rgb(69, 138, 119);
+  border-radius: 18px;
+}
+
+.welcome-2 {
+  color: white;
+  height: 100%;
+}
+
+.welcome-2-top {
+  height: 75%;
+  border: 2px solid green;
+}
+.welcome-2-top img {
+  width: 80%;
+  margin: 40px auto;
+  display: block;
+}
+
+
+
+.welcome-2-bottom {
+  height: 30%;
+  border: 2px solid rebeccapurple;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding-bottom: 40px;
+}
+
+.main-btn {
+  width: 100%;
+  padding: 18px;
+  font-weight: 500;
+  font-size: 1.1em;
+  border-radius: 35px;
+  background: linear-gradient(to left, #78e1b7, rgb(69, 138, 119));
+  border: none;
+  text-decoration: none;
+  display: block;
+  transition: 0.3s;
+}
+
+.main-btn:hover {
+  background: linear-gradient(to right, #78e1b7, rgb(69, 138, 119));
+  transition: 0.3s;
+}
+
+.vice-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 25px;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+.vice-btn i {
+  /* padding: 10px; */
+  font-size: 22px;
+  /* background-color: rgb(69, 138, 119); */
+}
