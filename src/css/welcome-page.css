@@ -44,36 +44,39 @@
   border-radius: 18px;
 }
 
+/* -------------------------------- */
 .welcome-2 {
   color: white;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .welcome-2-top {
   height: 75%;
-  border: 2px solid green;
+  /* border: 2px solid green; */
 }
+
 .welcome-2-top img {
   width: 80%;
   margin: 40px auto;
   display: block;
 }
 
-
-
 .welcome-2-bottom {
-  height: 30%;
-  border: 2px solid rebeccapurple;
+  height: 25%;
+  /* border: 2px solid rebeccapurple; */
   display: flex;
   flex-direction: column;
   justify-content: end;
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 
 .main-btn {
   width: 100%;
   padding: 18px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.1em;
   border-radius: 35px;
   background: linear-gradient(to left, #78e1b7, rgb(69, 138, 119));
@@ -98,6 +101,7 @@
   background-color: transparent;
   border: none;
   color: white;
+  font-size: 18px;
 }
 
 .vice-btn i {
@@ -105,3 +109,107 @@
   font-size: 22px;
   /* background-color: rgb(69, 138, 119); */
 }
+
+
+/* -------------- */
+
+.sign-up {
+  /* border: 2px solid red; */
+  height: 100%;
+}
+
+.sign-up .sign-up-top {
+  width: 100%;
+  padding: 10px 5px;
+  /* border: 2px solid green; */
+}
+
+.sign-up-top button {
+  font-size: 30px;
+  padding: 0 !important;
+  height: fit-content;
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+.sign-up-main {
+  height: 70%;
+  width: 100%;
+  /* border: 2px solid blue; */
+  display: flex;
+  align-items: center;
+}
+
+.sign-up-main .sum-inner {
+  height: 30%;
+  width: 100%;
+  border: 2px solid brown;
+  color: white;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Reduce spacing between flag and input field */
+.react-tel-input .flag-dropdown {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+.react-tel-input .form-control {
+  padding-left: 10px !important;
+  position: static !important;
+  order: 1 !important;
+  flex: 1;
+  border-radius: 0 !important;
+  padding: 20px !important;
+}
+
+.react-tel-input {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0 !important;
+  gap: 12px;
+  padding: 0 20px;
+}
+
+.react-tel-input .flag-dropdown {
+  position: static !important;
+  order: 2 !important;
+  background-color: rgb(208, 208, 208);
+  border-radius: 0 !important;
+}
+
+.country {
+  display: flex !important;
+  justify-content: unset !important;
+  text-align: start !important;
+  align-items: center !important;
+}
+
+.dial-code {
+  margin-left: auto !important;
+  display: block !important;
+}
+
+.country-name {
+  color: black;
+}
+
+.react-tel-input .special-label {
+  display: none !important;
+}
+
+
