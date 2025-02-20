@@ -6,12 +6,16 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "react-phone-input-2/lib/bootstrap.css";
 
+import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebaseConfig";
+
 const WelcomePage = () => {
   // Views: welcome → welcome-2 → sign-up
   const [currentView, setCurrentView] = useState("welcome");
 
   // Actual state
+  const [otp, setOtp] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [confirmationResult, setConfirmationResult] = useState(null)
 
   // Animation states
   const [animationClass, setAnimationClass] = useState("");
@@ -19,8 +23,34 @@ const WelcomePage = () => {
   // Loader progress (for welcome screen)
   const [loader, setLoader] = useState(0);
 
-  
+  //Sending the OTP and Verifying it
 
+  const sendOtp = async () => {
+    try {
+      if (!window.recaptchaVerifier) {
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+          size: "invisible",
+        });
+      }
+
+      const appVerifier = window.recaptchaVerifier
+
+      const formattedPhoneNum = "+" + phoneNumber
+      const result = await signInWithPhoneNumber(auth, formattedPhoneNum, appVerifier)
+
+      console.log('Result from trying to sign in', result);
+      setConfirmationResult(result)
+      console.log('OTP sent');
+      
+    } catch (error) {
+      console.log('Erroe sending OTP', error);
+    }
+  }
+
+  const verifyOtp = async () => {
+
+  }
+  
   useEffect(() => {
     // Loader animation for welcome screen
     const interval = setInterval(() => {
@@ -95,10 +125,18 @@ const WelcomePage = () => {
           <div className="sign-up-main">
             <div className="sum-inner">
               <h3>Enter your Phone number</h3>
-              <PhoneInput countryCodeEditable={false} />
-              <button className="main-btn">Continue</button>
+              <PhoneInput value={phoneNumber}
+               onChange={(phoneNumber) => {
+                setPhoneNumber(phoneNumber)
+                console.log(phoneNumber)
+               }} 
+               country={'ng'}
+               countryCodeEditable={false} />
+              <button onClick={() => sendOtp()} className="main-btn">Continue</button>
             </div>
           </div>
+
+          <div id="recaptcha-container"></div>
         </div>
       )}
     </div>
