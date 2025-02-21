@@ -23,33 +23,15 @@ const WelcomePage = () => {
   // Loader progress (for welcome screen)
   const [loader, setLoader] = useState(0);
 
-  //Sending the OTP and Verifying it
+  //logging in
 
-  const sendOtp = async () => {
-    try {
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-          size: "invisible",
-        });
-      }
+  const [loginDetails, setLoginDetails] = useState({
+    email: '',
+    password: ''
+  })
 
-      const appVerifier = window.recaptchaVerifier
-
-      const formattedPhoneNum = "+" + phoneNumber
-      const result = await signInWithPhoneNumber(auth, formattedPhoneNum, appVerifier)
-
-      console.log('Result from trying to sign in', result);
-      setConfirmationResult(result)
-      console.log('OTP sent');
-      
-    } catch (error) {
-      console.log('Erroe sending OTP', error);
-    }
-  }
-
-  const verifyOtp = async () => {
-
-  }
+  
+  
   
   useEffect(() => {
     // Loader animation for welcome screen
