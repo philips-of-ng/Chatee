@@ -30,6 +30,17 @@ const WelcomePage = () => {
     password: ''
   })
 
+
+  //SIGNING UP
+
+  const [signUpCred, setSignUpCred] = useState({ email: '', password: '', confirmPassword: '' })
+  const [displayPicture, setDisplayPicture] = useState(null)
+  const [loadingSignUp, setLoadingSignUp] = useState(false)
+
+  const handleSignUp = async () => {
+    
+  }
+
   
   
   
@@ -107,13 +118,11 @@ const WelcomePage = () => {
           <div className="sign-up-main">
             <div className="sum-inner">
               <h3>Enter your Phone number</h3>
-              <PhoneInput value={phoneNumber}
-               onChange={(phoneNumber) => {
-                setPhoneNumber(phoneNumber)
-                console.log(phoneNumber)
-               }} 
-               country={'ng'}
-               countryCodeEditable={false} />
+              
+              <div>
+                
+              </div>
+
               <button onClick={() => sendOtp()} className="main-btn">Continue</button>
             </div>
           </div>
