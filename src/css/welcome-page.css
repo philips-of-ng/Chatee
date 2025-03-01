@@ -175,6 +175,29 @@
   outline: none;
 }
 
+.otp-bx-container {
+  border: 2px solid red;
+  height: 100px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.otp-bx-container .one-dg {
+  width: 40px;
+  height: 50px;
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
 .next-btn {
   display: block;
   margin-left: auto;

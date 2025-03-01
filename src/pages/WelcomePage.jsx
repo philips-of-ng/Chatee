@@ -11,8 +11,8 @@ const WelcomePage = () => {
   // Views: welcome → welcome-2 → sign-up
   const [currentView, setCurrentView] = useState("welcome");
 
-  //Inner views: SignUp - su-email, su-password, su-username | SignIn - si-email, si-password
-  const [currentInnerView, setCurrentInnerView] = useState("")
+  //Inner views: SignUp - su-email, su-otp, su-password, su-username | SignIn - si-email, si-password
+  const [currentInnerView, setCurrentInnerView] = useState("su-otp")
 
 
   // Actual states
@@ -145,7 +145,7 @@ const WelcomePage = () => {
               className="main-btn"
               onClick={() => {
                 triggerTransition("sign-up", "animate__slideOutLeft")
-                setCurrentInnerView('su-email')
+                setCurrentInnerView('su-otp')
               }}
             >
               Get Started
@@ -199,6 +199,31 @@ const WelcomePage = () => {
                           sendCRU_Otp(signUpCred.email)
                         }}
                         className="next-btn">{loadingState ? 'Loading...' : 'Next'}</button>
+                    </div>
+                  </>
+                )
+              }
+
+              {
+                currentInnerView == 'su-otp' && (
+                  <>
+                    <div className={`one-input-module ${innerAnimationClass}`}>
+                      <h3>Confirm Email</h3>
+                      <p>{`Enter the OTP sent to ${signUpCred.email}`}</p>
+
+                      <input style={{position: 'fixed', zIndex: '-20', top: '2000px'}} maxLength={4} autoFocus onChange={(e) => {
+                        setOtp((prev) => {
+                          const updatedOtp = e.target.value
+                          return updatedOtp
+                        })
+                      }} type="tel" name="" id="" />
+
+                      <div className="otp-bx-container">
+                        <div className="one-dg">{otp[0]? otp[0] : ''}</div>
+                        <div className="one-dg">{otp[1]? otp[1] : ''}</div>
+                        <div className="one-dg">{otp[2]? otp[2] : ''}</div>
+                        <div className="one-dg">{otp[3]? otp[3] : ''}</div>
+                      </div>
                     </div>
                   </>
                 )
