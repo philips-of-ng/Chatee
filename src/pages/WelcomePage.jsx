@@ -5,8 +5,7 @@ import "animate.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "react-phone-input-2/lib/bootstrap.css";
-
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from "../firebaseConfig";
+import axios from "axios";
 
 const WelcomePage = () => {
   // Views: welcome → welcome-2 → sign-up
@@ -20,6 +19,9 @@ const WelcomePage = () => {
   const [otp, setOtp] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [confirmationResult, setConfirmationResult] = useState(null)
+
+  const [loadingState, setLoadingState] = useState(false)
+  const [errorState, setErrorState] = useState(null)
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -45,7 +47,39 @@ const WelcomePage = () => {
   const [displayPicture, setDisplayPicture] = useState(null)
   const [loadingSignUp, setLoadingSignUp] = useState(false)
 
+  const sendCRU_Otp = async (email) => {
 
+    const endPoint = `http://localhost:5000/api/users/cru-otp?email=${encodeURIComponent(email)}`
+
+    try {
+      setLoadingState(true)
+      const validEmail = emailRegex.test(email)
+
+      if (!validEmail) {
+        throw new Error('invalid email')
+      }
+
+      const response = await axios.post(endPoint)
+
+      console.log('Response from sneding otp', response);
+      
+
+      triggerInnerTransition('su-password', 'animate__fadeOutLeft')
+
+
+    } catch (error) {
+      if (error) {
+        setErrorState(error.message)
+        setTimeout(() => {
+          setErrorState(null)
+        }, 5000);
+      }
+    } finally {
+      setLoadingState(false)
+    }
+
+
+  }
 
 
 
@@ -144,7 +178,12 @@ const WelcomePage = () => {
                 currentInnerView == 'su-email' && (
                   <>
                     <div className={`one-input-module ${innerAnimationClass}`}>
-                      <h3>Enter your Email</h3>
+
+                      <h3 style={{ color: errorState ? 'red' : 'white' }}>
+                        {errorState || 'Enter your email'}
+                      </h3>
+
+
                       <input
                         onChange={(e) => {
 
@@ -157,12 +196,9 @@ const WelcomePage = () => {
                         type="email" placeholder="e.g johndoe@gmail.com" />
                       <button
                         onClick={() => {
-                          if (!emailRegex.test(signUpCred.email)) {
-                            return console.log('INVALID EMAIL');
-                          }
-                          triggerInnerTransition('su-password', 'animate__fadeOutLeft')
+                          sendCRU_Otp(signUpCred.email)
                         }}
-                        className="next-btn">Next</button>
+                        className="next-btn">{loadingState ? 'Loading...' : 'Next'}</button>
                     </div>
                   </>
                 )
