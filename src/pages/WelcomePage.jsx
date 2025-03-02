@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import assets from "../assets/assets";
 import "../css/welcome-page.css";
 import "animate.css";
@@ -6,6 +6,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "react-phone-input-2/lib/bootstrap.css";
 import axios from "axios";
+import Spinner from "../components/Spinner";
 
 const WelcomePage = () => {
   // Views: welcome → welcome-2 → sign-up
@@ -19,6 +20,7 @@ const WelcomePage = () => {
   const [otp, setOtp] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [confirmationResult, setConfirmationResult] = useState(null)
+  const [overlayLoader, setOverlayLoader] = useState(false)
 
   const [loadingState, setLoadingState] = useState(false)
   const [errorState, setErrorState] = useState(null)
@@ -62,9 +64,9 @@ const WelcomePage = () => {
       const response = await axios.post(endPoint)
 
       console.log('Response from sneding otp', response);
-      
 
-      triggerInnerTransition('su-password', 'animate__fadeOutLeft')
+
+      triggerInnerTransition('su-otp', 'animate__fadeOutLeft')
 
 
     } catch (error) {
@@ -77,10 +79,47 @@ const WelcomePage = () => {
     } finally {
       setLoadingState(false)
     }
+  }
 
+  const verifyCRU_Otp = async () => {
+    setOverlayLoader(true)
+    const endPoint = 'http:///localhost:5000/api/users/vcru-otp'
+    try {
+      const response = await axios.post(endPoint, {
+        email: signUpCred.email,
+        otpInput: otp
+      })
+
+      console.log(response);
+      
+
+    } catch (error) {
+      console.log('Error verifying otp', error);
+    } finally {
+      setOverlayLoader(false)
+    }
 
   }
 
+
+  const otpRef = useRef()
+  const focusOtpInput = () => {
+    if (otpRef.current) {
+      otpRef.current.focus()
+    }
+  }
+
+
+  useEffect(() => {
+    focusOtpInput()
+  }, [])
+
+  useEffect(() => {
+    if (otp.length >= 4) {
+      verifyCRU_Otp()
+    }
+
+  }, [otp])
 
 
   useEffect(() => {
@@ -120,6 +159,22 @@ const WelcomePage = () => {
 
   return (
     <div className="welcome-page-container">
+
+      {
+        overlayLoader && (
+          <>
+            <div className="overlay-loader">
+              <div>
+                <Spinner color={'#78e1b7'} size={40} speed={0.6}  />
+
+                <p>Please wait...</p>
+              </div>
+              
+            </div>
+          </>
+        )
+      }
+
       {currentView === "welcome" && (
         <div className={`welcome-page ${animationClass}`}>
           <div className="wp-top">
@@ -145,7 +200,7 @@ const WelcomePage = () => {
               className="main-btn"
               onClick={() => {
                 triggerTransition("sign-up", "animate__slideOutLeft")
-                setCurrentInnerView('su-otp')
+                setCurrentInnerView('su-email')
               }}
             >
               Get Started
@@ -196,7 +251,7 @@ const WelcomePage = () => {
                         type="email" placeholder="e.g johndoe@gmail.com" />
                       <button
                         onClick={() => {
-                          sendCRU_Otp(signUpCred.email)
+                          sendCRU_Otp(signUpCred.email.trim())
                         }}
                         className="next-btn">{loadingState ? 'Loading...' : 'Next'}</button>
                     </div>
@@ -211,7 +266,7 @@ const WelcomePage = () => {
                       <h3>Confirm Email</h3>
                       <p>{`Enter the OTP sent to ${signUpCred.email}`}</p>
 
-                      <input style={{position: 'fixed', zIndex: '-20', top: '2000px'}} maxLength={4} autoFocus onChange={(e) => {
+                      <input className="otp-input" ref={otpRef} maxLength={4} autoFocus onChange={(e) => {
                         setOtp((prev) => {
                           const updatedOtp = e.target.value
                           return updatedOtp
@@ -219,11 +274,13 @@ const WelcomePage = () => {
                       }} type="tel" name="" id="" />
 
                       <div className="otp-bx-container">
-                        <div className="one-dg">{otp[0]? otp[0] : ''}</div>
-                        <div className="one-dg">{otp[1]? otp[1] : ''}</div>
-                        <div className="one-dg">{otp[2]? otp[2] : ''}</div>
-                        <div className="one-dg">{otp[3]? otp[3] : ''}</div>
+                        <div onClick={() => focusOtpInput()} className="one-dg">{otp[0] ? otp[0] : ''}</div>
+                        <div onClick={() => focusOtpInput()} className="one-dg">{otp[1] ? otp[1] : ''}</div>
+                        <div onClick={() => focusOtpInput()} className="one-dg">{otp[2] ? otp[2] : ''}</div>
+                        <div onClick={() => focusOtpInput()} className="one-dg">{otp[3] ? otp[3] : ''}</div>
                       </div>
+
+                      <p className="resend-otp">Didn't receive code?  <button>Resend</button></p>
                     </div>
                   </>
                 )
