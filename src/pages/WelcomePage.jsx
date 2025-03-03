@@ -45,7 +45,7 @@ const WelcomePage = () => {
 
   //SIGNING UP
 
-  const [signUpCred, setSignUpCred] = useState({ email: '', password: '', confirmPassword: '', displayPicture: null })
+  const [signUpCred, setSignUpCred] = useState({ email: '', password: '', confirmPassword: '', displayPicture: "" })
   const [displayPicture, setDisplayPicture] = useState(null)
   const [loadingSignUp, setLoadingSignUp] = useState(false)
 
@@ -90,17 +90,60 @@ const WelcomePage = () => {
         otpInput: otp
       })
 
-      console.log(response);
-      
+      console.log('response from verifying otp', response);
+
+      if (response.status === 200 && response.data.message.toLowerCase() === 'otp verified') {
+        triggerInnerTransition('su-password', 'animate__slideOutLeft')
+      } else {
+        throw new Error('Error verifying OTP')
+      }
 
     } catch (error) {
       console.log('Error verifying otp', error);
+      setErrorState(error.message)
     } finally {
       setOverlayLoader(false)
     }
 
   }
 
+  const [statusBorder, setStatusBorder] = useState(null)
+
+  const checkUsername = async (e) => {
+    const endPoint = `http://localhost:5000/api/users/get-user-by-username`
+    const latestUsername = e.target.value
+    const userNameRegex = /^[a-zA-Z0-9_]{5,25}$/
+
+    if (!userNameRegex.test(latestUsername)) {
+      return setStatusBorder('red')
+    }
+    console.log(latestUsername);
+
+    try {
+      const response = await axios.get(endPoint, {
+        params: {
+          username: latestUsername
+        }
+      })
+
+      console.log(response);
+
+      if (response.data.message.toLowerCase() === 'user doesnt exist') {
+        setStatusBorder('green')
+      } else {
+        setStatusBorder('red')
+      }
+
+    } catch (error) {
+      console.log(error);
+
+    }
+  }
+
+  const createAccount = async () => {
+    console.log(signUpCred);
+    
+  }
 
   const otpRef = useRef()
   const focusOtpInput = () => {
@@ -122,6 +165,7 @@ const WelcomePage = () => {
   }, [otp])
 
 
+  //ANIMATIONS USE EFFECTS FUNCTIONS
   useEffect(() => {
     // Loader animation for welcome screen
     const interval = setInterval(() => {
@@ -165,11 +209,11 @@ const WelcomePage = () => {
           <>
             <div className="overlay-loader">
               <div>
-                <Spinner color={'#78e1b7'} size={40} speed={0.6}  />
+                <Spinner color={'#78e1b7'} size={40} speed={0.6} />
 
                 <p>Please wait...</p>
               </div>
-              
+
             </div>
           </>
         )
@@ -216,7 +260,12 @@ const WelcomePage = () => {
         <div className={`sign-up ${animationClass}`}>
           <div className="sign-up-top">
             <button
-              onClick={() => triggerTransition("welcome-2", "animate__slideOutRight")}
+              onClick={() => {
+                setErrorState(null)
+                setSignUpCred("")
+                setOtp('')
+                triggerTransition("welcome-2", "animate__slideOutRight")
+              }}
             >
               <i className="bx bx-left-arrow-alt"></i>
             </button>
@@ -263,7 +312,11 @@ const WelcomePage = () => {
                 currentInnerView == 'su-otp' && (
                   <>
                     <div className={`one-input-module ${innerAnimationClass}`}>
-                      <h3>Confirm Email</h3>
+
+                      <h3 style={{ color: errorState ? 'red' : 'white' }}>
+                        {errorState || 'Confirm Email'}
+                      </h3>
+
                       <p>{`Enter the OTP sent to ${signUpCred.email}`}</p>
 
                       <input className="otp-input" ref={otpRef} maxLength={4} autoFocus onChange={(e) => {
@@ -290,7 +343,9 @@ const WelcomePage = () => {
                 currentInnerView == 'su-password' && (
                   <>
                     <div className={`one-input-module ${innerAnimationClass}`}>
-                      <h3>Create New Password</h3>
+                      <h3 style={{ color: errorState ? 'red' : 'white' }}>
+                        {errorState || 'Create New Password'}
+                      </h3>
 
                       <input
                         onChange={(e) => {
@@ -314,10 +369,20 @@ const WelcomePage = () => {
 
                       <button
                         onClick={() => {
-                          if (!emailRegex.test(signUpCred.email)) {
-                            return console.log('INVALID EMAIL');
+                          if (!passwordRegex.test(signUpCred.password)) {
+                            setErrorState('Weak or Invalid Password');
+                            setTimeout(() => setErrorState(null), 5000);
+                            return; // 🔹 Stops execution if password is invalid
                           }
-                          triggerInnerTransition('su-dp-username', 'animate__fadeOutLeft')
+
+                          if (signUpCred.password !== signUpCred.confirmPassword) {
+                            setErrorState("Passwords don't match, mf");
+                            setTimeout(() => setErrorState(null), 5000);
+                            return; // 🔹 Stops execution if passwords don't match
+                          }
+
+                          // If no errors, trigger the function
+                          triggerInnerTransition('su-dp-username', 'animate__fadeOutLeft');
                         }}
                         className="next-btn">Next</button>
                     </div>
@@ -395,9 +460,9 @@ const WelcomePage = () => {
 
                       <h3>What should people call you?</h3>
 
-                      <input type="text" placeholder="Username" />
+                      <input style={{ border: `${statusBorder == 'red' ? '2px solid red' : statusBorder === 'green' ? '2px solid green' : ''}` }} onChange={(e) => checkUsername(e)} type="text" placeholder="Username" />
 
-                      <button className="main-btn">Create Account</button>
+                      <button onClick={() => createAccount()} className="main-btn">Create Account</button>
 
                     </div>
                   </>
