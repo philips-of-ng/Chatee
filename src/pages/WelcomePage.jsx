@@ -65,13 +65,16 @@ const WelcomePage = () => {
 
       console.log('Response from sneding otp', response);
 
+      if (response.data.message.toLowerCase() === 'user with email already exists') {
+        throw new Error(response.data.message);
+      }
 
       triggerInnerTransition('su-otp', 'animate__fadeOutLeft')
 
-
     } catch (error) {
       if (error) {
-        setErrorState(error.message)
+        console.log(error)
+        setErrorState(error.response.data.message)
         setTimeout(() => {
           setErrorState(null)
         }, 5000);
@@ -140,10 +143,33 @@ const WelcomePage = () => {
     }
   }
 
+
   const createAccount = async () => {
-    console.log(signUpCred);
-    
-  }
+    console.log("signUpCred:", signUpCred);
+
+    const formData = new FormData();
+    formData.append("image", signUpCred.displayPicture);
+
+    // Log FormData contents
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    const imageUploadEndpoint = "http://localhost:5000/api/files/upload";
+
+    try {
+      const response = await axios.post(imageUploadEndpoint, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Let Axios set the boundary
+        },
+      });
+
+      console.log("Upload response:", response.data);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
+  };
+
 
   const otpRef = useRef()
   const focusOtpInput = () => {
