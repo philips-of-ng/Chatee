@@ -146,28 +146,18 @@ const WelcomePage = () => {
 
   const createAccount = async () => {
     console.log("signUpCred:", signUpCred);
-
-    const formData = new FormData();
-    formData.append("image", signUpCred.displayPicture);
-
-    // Log FormData contents
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
-    const imageUploadEndpoint = "http://localhost:5000/api/files/upload";
-
+    const endPoint = `http://localhost:5000/api/users/create-user`
     try {
-      const response = await axios.post(imageUploadEndpoint, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Let Axios set the boundary
-        },
-      });
 
-      console.log("Upload response:", response.data);
+      const response = await axios.post(endPoint)
+      
+      console.log('Response from creating account', response);
+      
     } catch (error) {
-      console.error("Upload failed:", error);
+      
     }
+
+
   };
 
 
