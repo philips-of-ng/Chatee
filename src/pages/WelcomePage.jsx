@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import assets from "../assets/assets";
 import "../css/welcome-page.css";
 import "animate.css";
@@ -7,8 +7,13 @@ import "react-phone-input-2/lib/style.css";
 import "react-phone-input-2/lib/bootstrap.css";
 import axios from "axios";
 import Spinner from "../components/Spinner";
+import { useAuth } from "../context/AuthContext";
+
 
 const WelcomePage = () => {
+
+  const { login } = useAuth()
+
   // Views: welcome → welcome-2 → sign-up
   const [currentView, setCurrentView] = useState("welcome");
 
@@ -36,16 +41,39 @@ const WelcomePage = () => {
   const [loader, setLoader] = useState(0);
 
   //logging in
-
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: ''
   })
 
+  const loginAccount = async () => {
+    const endPoint = `http://localhost:5000/api/users/login-user`
+
+    const loginPayload = {
+      email: loginDetails.email,
+      password: loginDetails.password
+    }
+
+    console.log('what im sending', loginPayload);
+    
+
+    try {
+      const response = await axios.post(endPoint, loginPayload)
+      console.log('response from trying to log in', response);
+      if (response.data.userInfor) {
+        const theUserInfo = response.data.userInfo
+        login(theUserInfo)
+      }
+
+    } catch (error) {
+      console.log('error logging in', error);
+    }
+  }
+
 
   //SIGNING UP
 
-  const [signUpCred, setSignUpCred] = useState({ email: '', password: '', confirmPassword: '', displayPicture: "" })
+  const [signUpCred, setSignUpCred] = useState({ email: '', userName: '', password: '', confirmPassword: '', displayPicture: "" })
   const [displayPicture, setDisplayPicture] = useState(null)
   const [loadingSignUp, setLoadingSignUp] = useState(false)
 
@@ -115,6 +143,7 @@ const WelcomePage = () => {
   const checkUsername = async (e) => {
     const endPoint = `http://localhost:5000/api/users/get-user-by-username`
     const latestUsername = e.target.value
+    setSignUpCred((prev) => ({ ...prev, userName: e.target.value }))
     const userNameRegex = /^[a-zA-Z0-9_]{5,25}$/
 
     if (!userNameRegex.test(latestUsername)) {
@@ -147,17 +176,23 @@ const WelcomePage = () => {
   const createAccount = async () => {
     console.log("signUpCred:", signUpCred);
     const endPoint = `http://localhost:5000/api/users/create-user`
-    try {
 
-      const response = await axios.post(endPoint)
-      
-      console.log('Response from creating account', response);
-      
-    } catch (error) {
-      
+    const signUpPayload = {
+      email: signUpCred.email,
+      password: signUpCred.password,
+      userName: signUpCred.userName,
+      displayPicture: signUpCred.displayPicture
     }
 
+    try {
 
+      const response = await axios.post(endPoint, signUpPayload)
+
+      console.log('Response from creating account', response);
+
+    } catch (error) {
+      console.log('Error creating user', error);
+    }
   };
 
 
@@ -265,7 +300,12 @@ const WelcomePage = () => {
             >
               Get Started
             </button>
-            <button className="vice-btn">
+
+            <button onClick={() => {
+              console.log('clicked');
+              triggerTransition("sign-in", "animate__slideOutLeft")
+              setCurrentInnerView('si-email')
+            }} className="vice-btn">
               Already have an account? <i className="bx bx-right-arrow-alt"></i>
             </button>
           </div>
@@ -476,7 +516,14 @@ const WelcomePage = () => {
 
                       <h3>What should people call you?</h3>
 
-                      <input style={{ border: `${statusBorder == 'red' ? '2px solid red' : statusBorder === 'green' ? '2px solid green' : ''}` }} onChange={(e) => checkUsername(e)} type="text" placeholder="Username" />
+                      <input style={{ border: `${statusBorder == 'red' ? '2px solid red' : statusBorder === 'green' ? '2px solid green' : ''}` }} onChange={(e) => {
+                        checkUsername(e)
+                        setSignUpCred((prev) => {
+                          const updatedCreds = { ...prev, userName: e.target.value }
+                          console.log(signUpCred);
+                          return updatedCreds
+                        })
+                      }} type="text" placeholder="Username" />
 
                       <button onClick={() => createAccount()} className="main-btn">Create Account</button>
 
@@ -489,9 +536,93 @@ const WelcomePage = () => {
             </div>
           </div>
 
-          <div id="recaptcha-container"></div>
         </div>
       )}
+
+      {/* THIS IS THE SIGN-IN OR LOGIN PART OF THE CODE */}
+      {/* THIS IS THE SIGN-IN OR LOGIN PART OF THE CODE */}
+
+      {
+        currentView === 'sign-in' && (
+          <div className={`sign-in ${animationClass}`}>
+            <div className="sign-up-top">
+              <button
+                onClick={() => {
+                  setErrorState(null)
+                  setSignUpCred("")
+                  setOtp('')
+                  triggerTransition("welcome-2", "animate__slideOutRight")
+                }}
+              >
+                <i className="bx bx-left-arrow-alt"></i>
+              </button>
+
+              <h4>Sign In</h4>
+
+              <button><i class='bx bx-question-mark'></i></button>
+            </div>
+
+
+            <div className="sign-up-main">
+              <div className="sum-inner">
+
+                {
+                  currentInnerView == 'si-email' && (
+                    <>
+                      <div className={`one-input-module ${innerAnimationClass}`}>
+                        <h3>Enter your email</h3>
+
+                        <input type="email" placeholder="Enter your account email"
+                          onChange={(e) => {
+                            setLoginDetails((prev) => {
+                              const updatedDetails = { ...prev, email: e.target.value }
+                              console.log(updatedDetails);
+                              return updatedDetails
+                            })
+                          }}
+                        />
+
+                        <button onClick={() => {
+                          triggerInnerTransition('si-password', "animate__fadeOutLeft")
+                        }} className="next-btn">Next</button>
+                      </div>
+                    </>
+                  )
+                }
+
+
+                {
+                  currentInnerView == 'si-password' && (
+                    <>
+                      <div className={`one-input-module ${innerAnimationClass}`}>
+                        <h3>Enter your Password</h3>
+
+                        <input type="password" placeholder="Enter your account password"
+                          onChange={(e) => {
+                            setLoginDetails((prev) => {
+                              const updatedDetails = { ...prev, password: e.target.value }
+                              console.log(updatedDetails);
+                              return updatedDetails
+                            })
+                          }}
+                        />
+
+                        <button onClick={() => {
+                          loginAccount()
+                        }} className="next-btn">Next</button>
+                      </div>
+                    </>
+                  )
+                }
+
+              </div>
+            </div>
+
+
+
+          </div>
+        )
+      }
     </div>
   );
 };

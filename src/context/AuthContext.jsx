@@ -1,7 +1,5 @@
 import React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../firebaseConfig";
-import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const AuthContext = createContext()
 
@@ -13,19 +11,33 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      currentUser ? setUser(currentUser) && console.log('Current user', currentUser) : console.log('No user for now', currentUser);
-      setLoading(false)
-    })
 
-    return () => unsubscribe()
+  // get the user from the local storage if there is one
+  useEffect(() => {
+    const storedUser = localStorage.getItem('chateeUser')
+    if (storedUser) {
+      setUser(storedUser)
+    }
   }, [])
 
+  useEffect(() => {
+    console.log('user from authcontext', user);
+  }, [user])
+
+
+  const login = (userObject) => {
+    try {
+      setUser(userObject)
+      localStorage.setItem('chateeUser', userObject)
+    } catch (error) {
+      console.log('auth error logging in', error);
+    }
+  }
 
   const logout = async () => {
     try {
-      await signOut(auth)
+      setUser(null)
+      localStorage.removeItem('chateeUser')
     } catch (error) {
       console.log('Error logging out', error);
     }
@@ -33,8 +45,8 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{user, loading, logout}} >
-      { loading ? 'Loading' : children }
+    <AuthContext.Provider value={{user, loading, login, logout}} >
+      { children }
     </AuthContext.Provider>
   )
 
