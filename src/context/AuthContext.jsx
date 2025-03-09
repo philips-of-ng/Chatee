@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setUser(userObject)
       localStorage.setItem('chateeUser', userObject)
+      console.log('User Logged In and Saved', JSON.parse(localStorage.getItem('chateeUser')));
     } catch (error) {
       console.log('auth error logging in', error);
     }

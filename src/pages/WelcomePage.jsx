@@ -60,8 +60,10 @@ const WelcomePage = () => {
     try {
       const response = await axios.post(endPoint, loginPayload)
       console.log('response from trying to log in', response);
-      if (response.data.userInfor) {
-        const theUserInfo = response.data.userInfo
+      if (response.data.userInfo) {
+
+        //save the user info in authcontext except the password
+        const theUserInfo = { ...response.data.userInfo, password: 'undisclosed' }
         login(theUserInfo)
       }
 
