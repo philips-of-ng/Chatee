@@ -46,12 +46,12 @@ const WelcomePage = () => {
     password: ''
   })
 
-  const loginAccount = async () => {
+  const loginAccount = async (sourceObject) => {
     const endPoint = `http://localhost:5000/api/users/login-user`
 
     const loginPayload = {
-      email: loginDetails.email,
-      password: loginDetails.password
+      email: sourceObject.email,
+      password: sourceObject.password
     }
 
     console.log('what im sending', loginPayload);
@@ -187,10 +187,13 @@ const WelcomePage = () => {
     }
 
     try {
-
       const response = await axios.post(endPoint, signUpPayload)
-
       console.log('Response from creating account', response);
+
+      //log user in after account creation
+      setTimeout(() => {
+        loginAccount(signUpPayload)
+      }, 1500);
 
     } catch (error) {
       console.log('Error creating user', error);
@@ -204,7 +207,6 @@ const WelcomePage = () => {
       otpRef.current.focus()
     }
   }
-
 
   useEffect(() => {
     focusOtpInput()
@@ -610,7 +612,7 @@ const WelcomePage = () => {
                         />
 
                         <button onClick={() => {
-                          loginAccount()
+                          loginAccount(loginDetails)
                         }} className="next-btn">Next</button>
                       </div>
                     </>
@@ -619,8 +621,6 @@ const WelcomePage = () => {
 
               </div>
             </div>
-
-
 
           </div>
         )
