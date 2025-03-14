@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   console.log('The auth context function is reached');
   
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState('user naani')
   const [loading, setLoading] = useState(true)
 
 
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const logout = async () => {
+  const logout = () => {
     try {
       setUser(null)
       localStorage.removeItem('chateeUser')

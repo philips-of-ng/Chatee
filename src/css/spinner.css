@@ -1,7 +1,10 @@
 .spinner {
   background-color: transparent;
   animation: spin linear infinite;
+  display: block;
 }
+
+
 
 @keyframes spin {
   from {

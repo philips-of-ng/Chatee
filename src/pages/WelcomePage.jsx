@@ -3,16 +3,20 @@ import assets from "../assets/assets";
 import "../css/welcome-page.css";
 import "animate.css";
 import PhoneInput from "react-phone-input-2";
+import { ClipLoader } from 'react-spinners'
 import "react-phone-input-2/lib/style.css";
 import "react-phone-input-2/lib/bootstrap.css";
 import axios from "axios";
 import Spinner from "../components/Spinner";
 import { useAuth } from "../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const WelcomePage = () => {
 
-  const { login } = useAuth()
+  const navigate = useNavigate()
+
+  const { login, user } = useAuth()
 
   // Views: welcome → welcome-2 → sign-up
   const [currentView, setCurrentView] = useState("welcome");
@@ -25,6 +29,7 @@ const WelcomePage = () => {
   const [otp, setOtp] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [confirmationResult, setConfirmationResult] = useState(null)
+
   const [overlayLoader, setOverlayLoader] = useState(false)
 
   const [loadingState, setLoadingState] = useState(false)
@@ -40,6 +45,16 @@ const WelcomePage = () => {
   // Loader progress (for welcome screen)
   const [loader, setLoader] = useState(0);
 
+
+  useEffect(() => {
+    if (user) {
+      navigate('/main-view')
+
+      console.log(user);
+      
+    }
+  }, [user])
+
   //logging in
   const [loginDetails, setLoginDetails] = useState({
     email: '',
@@ -47,6 +62,7 @@ const WelcomePage = () => {
   })
 
   const loginAccount = async (sourceObject) => {
+    setLoadingState(true)
     const endPoint = `http://localhost:5000/api/users/login-user`
 
     const loginPayload = {
@@ -69,6 +85,8 @@ const WelcomePage = () => {
 
     } catch (error) {
       console.log('error logging in', error);
+    } finally {
+      setLoadingState(false)
     }
   }
 
@@ -588,7 +606,7 @@ const WelcomePage = () => {
 
                         <button onClick={() => {
                           triggerInnerTransition('si-password', "animate__fadeOutLeft")
-                        }} className="next-btn">Next</button>
+                        }} className={`next-btn`}>Next</button>
                       </div>
                     </>
                   )
@@ -613,7 +631,7 @@ const WelcomePage = () => {
 
                         <button onClick={() => {
                           loginAccount(loginDetails)
-                        }} className="next-btn">Next</button>
+                        }} className="next-btn">{ loadingState ? <Spinner size={25} color={'white'} speed={0.6} /> : 'Next' }</button>
                       </div>
                     </>
                   )

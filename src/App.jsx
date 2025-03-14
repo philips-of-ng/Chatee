@@ -1,19 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import WelcomePage from './pages/WelcomePage'
 import './app.css'
-import { AuthProvider } from './context/AuthContext'
+import { useAuth } from './context/AuthContext.jsx'
+import MainView from './pages/MainView'
 
 const App = () => {
 
-  const [loggedIn, setLoggedIn] = useState(false)
+  // const [loggedIn, setLoggedIn] = useState(false)
+
 
   return (
     <AuthProvider>
       <div className='whole-app-container'>
         <Router>
           <Routes>
-            <Route path='/' element={<WelcomePage />} />
+
+            <Route path='/' element={ user ? <MainView /> : <WelcomePage /> } />
+            
           </Routes>
         </Router>
       </div>
