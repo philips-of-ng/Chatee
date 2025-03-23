@@ -49,9 +49,7 @@ const WelcomePage = () => {
   useEffect(() => {
     if (user) {
       navigate('/main-view')
-
       console.log(user);
-      
     }
   }, [user])
 

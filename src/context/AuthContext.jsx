@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   console.log('The auth context function is reached');
   
 
-  const [user, setUser] = useState('user naani')
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
 
@@ -16,7 +16,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('chateeUser')
     if (storedUser) {
-      setUser(storedUser)
+      console.log('There is a stored user');
+      
+      setUser(JSON.parse(storedUser))
     }
   }, [])
 
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const login = (userObject) => {
     try {
       setUser(userObject)
-      localStorage.setItem('chateeUser', userObject)
+      localStorage.setItem('chateeUser', JSON.stringify(userObject))
       console.log('User Logged In and Saved', JSON.parse(localStorage.getItem('chateeUser')));
     } catch (error) {
       console.log('auth error logging in', error);

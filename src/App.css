@@ -1,3 +1,7 @@
+:root {
+  --color-main: rgb(69, 138, 119)
+}
+
 *{
   box-sizing: border-box;
   padding: 0;
@@ -17,4 +21,13 @@ body {
   width: 100vw;
 }
 
+/* -----MAIN VIEW CSS------ */
 
+.main-view {
+  height: 100%;
+  border: 2px solid green;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
