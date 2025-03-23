@@ -8,15 +8,17 @@ const AppContext = createContext()
 
   console.log('The App Context Function is Reached');
 
-  const [currentTab, setCurrentTab] = useState(null)
 
-  useEffect(() => {
-    setCurrentTab('messages')
-  }, [])
-
+  //CODE FOR SETTING THE CURRENT TAB
+  const [currentTab, setCurrentTab] = useState('messages')
   useEffect(() => {
     console.log('The tab has been set to', currentTab);
   }, [currentTab])
+
+  //CODE FOR CONTROLLING THE SEARCH SYSTEM
+  const [searchActive, setSearchActive] = useState(false)
+
+
 
   return (
     <AppContext.Provider value={{currentTab, setCurrentTab}}>
