@@ -1,0 +1,55 @@
+.one-listed-chat {
+  /* border: 2px solid yellow; */
+  padding: 12px 0;
+  display: flex;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.olc-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.olc-left img {
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+  border: 1px solid white;
+  object-position: center;
+  object-fit: cover;
+}
+
+.olc-left div p {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.olc-left div span {
+  color: #A0A0A0;
+}
+
+
+.olc-right {
+  text-align: right;
+}
+
+.olc-right p {
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+.olc-right span {
+  background-color: #00C608;
+  font-size: 0.8em;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+}

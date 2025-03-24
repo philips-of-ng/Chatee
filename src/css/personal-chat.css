@@ -1,0 +1,93 @@
+:root {
+  --color-main: rgb(69, 138, 119)
+}
+
+.personal-chat {
+  height: 100%;
+  width: 100%;
+  border: 2px solid green;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.pc-top {
+  height: 60px;
+  border: 2px solid blue;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pc-top-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pc-top-left button {
+  height: 50px;
+  width: 40px;
+  font-size: 25px;
+  color: white;
+  background-color: transparent;
+  border: none;
+}
+
+.pc-top-left img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.pc-top-right {
+  border: 2px solid yellow;
+  display: flex;
+  align-items: center;
+}
+
+.pc-top-right button {
+  height: 50px;
+  width: 40px;
+  font-size: 25px;
+  color: white;
+  background-color: transparent;
+  border: none;
+}
+
+
+.pc-main {
+  height: 80%;
+  border: 2px solid rebeccapurple;
+}
+
+.pc-bottom {
+  height: 60px;
+  border: 2px solid yellow;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pc-bottom button {
+  height: 50px;
+  width: 40px;
+  font-size: 25px;
+  color: var(--color-main);
+  background-color: transparent;
+  border: none;
+}
+
+.pc-bottom input {
+  width: 75%;
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background-color: #A0A0A0;
+  color: white;
+}

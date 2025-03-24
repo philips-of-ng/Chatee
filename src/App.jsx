@@ -5,6 +5,7 @@ import './app.css'
 import { useAuth, AuthProvider } from './context/AuthContext.jsx'
 import { AppProvider, } from './context/AppContext.jsx'
 import MainView from './pages/MainView'
+import PersonalChat from './components/PersonalChat.jsx'
 
 const App = () => {
 
@@ -16,6 +17,8 @@ const App = () => {
             <Routes>
 
               <Route path='/' element={<Main_or_Welcome />} />
+
+              <Route path='/personal-chat' element={<PersonalChat />} />
 
             </Routes>
           </Router>

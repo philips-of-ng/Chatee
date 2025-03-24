@@ -2,6 +2,7 @@ import React from 'react'
 import '../css/messages-view.css'
 
 import assets from '../assets/assets.js'
+import OneListedChat from '../components/OneListedChat.jsx'
 
 const MessagesView = () => {
   return (
@@ -20,7 +21,11 @@ const MessagesView = () => {
         <input type="text" placeholder='Search for a chat...' />
       </div>
 
-      Meesages view
+      <div className='chat-list'>
+        <OneListedChat />
+        <OneListedChat />
+        <OneListedChat />
+      </div>
 
 
     </div>
