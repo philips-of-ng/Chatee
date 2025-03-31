@@ -10,6 +10,8 @@ const AppContext = createContext()
 
 
   //CODE FOR SETTING THE CURRENT TAB
+  //possible values - "messages", "calls", "groups", "settings"
+
   const [currentTab, setCurrentTab] = useState('messages')
   useEffect(() => {
     console.log('The tab has been set to', currentTab);

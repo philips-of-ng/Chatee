@@ -17,29 +17,29 @@ const BottomNav = ({ activePage }) => {
       <button
         onClick={() => tabSetter('messages')}
         className={`${activePage == 'messages' ? 'active' : ''}`}>
-        <i class='bx bxs-message-square-dots' ></i>
+        <i class={`bx bxs-message-square-dots ${activePage == 'messages' ? 'active' : ''}`}></i>
       </button>
 
 
       <button
         onClick={() => tabSetter('calls')}
         className={`${activePage == 'calls' ? 'active' : ''}`}>
-        <i class='bx bxs-phone' ></i>
+        <i class={`bx bxs-phone ${activePage == 'calls' ? 'active' : ''}`} ></i>
       </button>
 
 
       <button
         onClick={() => tabSetter('groups')}
         className={`${activePage == 'groups' ? 'active' : ''}`}>
-        <i class='bx bxs-group' ></i>
+        <i class={`bx bxs-group ${activePage == 'groups' ? 'active' : ''}`} ></i>
       </button>
 
 
       <button
-        onClick={() => tabSetter('profile')}
+        onClick={() => tabSetter('settings')}
 
-        className={`${activePage == 'profile' ? 'active' : ''}`}>
-        <i class='bx bxs-cog' ></i>
+        className={`${activePage == 'settings' ? 'active' : ''}`}>
+        <i class={`bx bxs-cog ${activePage == 'settings' ? 'active' : ''}`} ></i>
       </button>
 
     </div>

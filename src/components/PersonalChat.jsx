@@ -1,14 +1,17 @@
 import React from 'react'
 import '../css/personal-chat.css'
 import assets from '../assets/assets'
+import { useNavigate } from 'react-router-dom'
 
 const PersonalChat = () => {
+
+  const navigate = useNavigate()
 
   return (
     <div className='personal-chat'>
       <div className='pc-top'>
         <div className='pc-top-left'>
-          <button><i class='bx bx-arrow-back'></i></button>
+          <button onClick={() => navigate('/')}><i class='bx bx-arrow-back'></i></button>
           <img src={assets.userImage} alt="" />
           <p>Philips Edun</p>
         </div>

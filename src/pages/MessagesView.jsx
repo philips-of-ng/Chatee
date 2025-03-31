@@ -8,6 +8,14 @@ const MessagesView = () => {
   return (
     <div className='messages-view'>
       
+      <div className='add-user'>
+        <div className='add-user-top'>
+          <button><i class='bx bx-arrow-back'></i></button>
+          <input type="text" placeholder='Search for a friend...' />
+        </div>
+      </div>
+
+
       <div className="mv-top">
         <img src={assets.chatee_logo} />
 
