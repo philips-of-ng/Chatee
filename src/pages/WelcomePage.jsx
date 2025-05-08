@@ -190,8 +190,28 @@ const WelcomePage = () => {
     }
   }
 
+  const uploadDisplayPicture = async () => {
+    const imageUploadEndpoint = `http://localhost:5000/api/files/upload`
+    console.log('This is the file gotten from the image input', displayPicture);
+    
+
+    const response = await axios.post(imageUploadEndpoint, {
+      'image' : signUpCred.displayPicture
+    })
+
+    console.log('Image Upload Response', response);
+
+    return response
+  }
 
   const createAccount = async () => {
+
+    const imageUplaodResponse = uploadDisplayPicture()
+
+    console.log('Image upload response from the CreateAccount function', imageUplaodResponse);
+
+    if (!imageUplaodResponse) return
+
     console.log("signUpCred:", signUpCred);
     const endPoint = `http://localhost:5000/api/users/create-user`
 

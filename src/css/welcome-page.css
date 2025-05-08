@@ -117,6 +117,10 @@
 
 /* -------------- */
 
+.one-input-module input {
+  color:  black !important;
+}
+
 .sign-up, .sign-in {
   /* border: 2px solid red; */
   height: 100%;
